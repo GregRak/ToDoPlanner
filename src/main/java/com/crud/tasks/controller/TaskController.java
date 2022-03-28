@@ -5,13 +5,11 @@ import com.crud.tasks.domain.TaskDto;
 import com.crud.tasks.mapper.TaskMapper;
 import com.crud.tasks.service.DbService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/v1/tasks")
@@ -29,12 +27,7 @@ public class TaskController {
 
     @GetMapping(value = "{taskId}")
     public ResponseEntity<TaskDto> getTask(@PathVariable("taskId") Long taskId) throws TaskNotFoundException {
-        try {
-            return new ResponseEntity<>(taskMapper.mapToTaskDto(service.getTask(taskId)), HttpStatus.OK);
-        } catch (TaskNotFoundException e) {
-            return new ResponseEntity<>(
-                    new TaskDto(0L, "There is no taks with id equal to " + taskId, ""), HttpStatus.BAD_REQUEST);
-        }
+            return ResponseEntity.ok(taskMapper.mapToTaskDto(service.getTask(taskId)));
     }
 
     @DeleteMapping
