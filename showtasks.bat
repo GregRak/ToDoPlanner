@@ -7,7 +7,7 @@ goto fail
 :browserStart
 start C:\"Program Files (x86)"\Google\Chrome\Application\chrome.exe
 start http://localhost:8080/crud/v1/tasks
-if "%ERRORLEVEL%" == "0" goto ende
+if "%ERRORLEVEL%" == "0" goto end
 echo.
 echo BROWSER START has errors - breaking work
 goto fail
