@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 
 @Builder
 @Getter
+@RequiredArgsConstructor
 public class Mail {
     private final String mailTo;
     private final String toCc;
