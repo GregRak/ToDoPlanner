@@ -1,9 +1,6 @@
 package com.crud.tasks.trello;
 
-import com.crud.tasks.domain.TrelloBoard;
-import com.crud.tasks.domain.TrelloBoardDto;
-import com.crud.tasks.domain.TrelloList;
-import com.crud.tasks.domain.TrelloListDto;
+import com.crud.tasks.domain.*;
 import com.crud.tasks.mapper.TrelloMapper;
 import com.crud.tasks.service.TrelloService;
 import com.crud.tasks.trello.facade.TrelloFacade;
@@ -15,7 +12,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
 
@@ -103,5 +99,26 @@ public class TrelloFacadeTest {
                 assertThat(trelloListDto.isClosed()).isFalse();
             });
         });
+    }
+
+    @Test
+    void shouldCreateTrelloCard() {
+        //Given
+        TrelloCard trelloCard = new TrelloCard("Card", "Trello Card Test", "PosTest", "1");
+        TrelloCardDto trelloCardDto = new TrelloCardDto("CardDto", "Trello CardDto Test", "DtoPosTest", "2");
+        TrelloDto trelloDto = new TrelloDto(1, 2);
+        AttachmentsByTypeDto attachmentsByTypeDto = new AttachmentsByTypeDto(trelloDto);
+        BadgesDto badgesDto = new BadgesDto(1, attachmentsByTypeDto);
+        CreatedTrelloCardDto createdTrelloCardDto = new CreatedTrelloCardDto("Id_1", "To_Do", "UrlTest", badgesDto);
+
+        when(trelloMapper.mapToCardDto(trelloCard)).thenReturn(trelloCardDto);
+        when(trelloMapper.mapToCard(trelloCardDto)).thenReturn(trelloCard);
+        when(trelloService.createTrelloCard(trelloCardDto)).thenReturn(createdTrelloCardDto);
+        //When
+        CreatedTrelloCardDto result = trelloFacade.createCard(trelloCardDto);
+        //Then
+        assertThat(result.getShortUrl()).isEqualTo("UrlTest");
+        assertThat(result.getBadgesDto().getAttachmentsByTypeDto().getTrelloDto().getBoard()).isEqualTo(1);
+        assertThat(result.getBadgesDto().getAttachmentsByTypeDto().getTrelloDto().getCard()).isNotEqualTo(1);
     }
 }
