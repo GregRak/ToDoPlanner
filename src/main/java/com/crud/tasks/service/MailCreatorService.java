@@ -46,4 +46,27 @@ public class MailCreatorService {
         context.setVariable("application_functionality", functionality);
         return templateEngine.process("mail/created-trello-card-mail", context);
     }
+
+    public String buildEmail(String message){
+        List<String> functionality = new ArrayList<>();
+        functionality.add("You can manage your tasks");
+        functionality.add("Provides connection with Trello Account");
+        functionality.add("Application allows sending tasks to Trello");
+
+        Context context = new Context();
+        context.setVariable("preview", "Daily update");
+        context.setVariable("message", message);
+        context.setVariable("tasks_url", "http://localhost:8888/tasks_frontend");
+        context.setVariable("button", "Check your tasks");
+        context.setVariable("admin_name", adminConfig.getAdminName());
+        context.setVariable("app_name", appInfoConfig.getInfoAppName());
+        context.setVariable("company_name", appInfoConfig.getInfoCompanyName());
+        context.setVariable("company_email", appInfoConfig.getInfoCompanyEmail());
+        context.setVariable("company_phone", appInfoConfig.getInfoCompanyPhone());
+        context.setVariable("show_button", true);
+        context.setVariable("is_friend", false);
+        context.setVariable("admin_config", adminConfig);
+        context.setVariable("application_functionality", functionality);
+        return templateEngine.process("mail/daily-mail-with-tasks", context);
+    }
 }
